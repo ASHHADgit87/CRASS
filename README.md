@@ -20,10 +20,10 @@ CRASS can function as a **Software as a Service (SaaS)** product, allowing devel
 
 ### 🎨 Frontend
 - **Dashboard / Home Page:** Project stats, recent scans, security scores with intuitive emojis/icons  
-- **Project Upload & Management:** Drag & drop files, GitHub repo input, scan actions, progress bars, color-coded alerts ⚠️✅ℹ️  
+- **Project Upload & Management:** Drag & drop files, GitHub repo input, scan actions, progress bars, color-coded alerts
 - **Code Editor / Real-Time Review:** Syntax-highlighted editor, AI suggestions sidebar, mark suggestions as Fixed/Ignore  
 - **Scan Reports:** Code quality, security vulnerabilities, suggestions, charts, PDF download placeholder  
-- **Analytics Dashboard:** Trend charts, top-performing projects, project filters, subtle icons 📈🛡️⚡  
+- **Analytics Dashboard:** Trend charts, top-performing projects, project filters, subtle icons   
 - **Profile / Settings:** User avatar, info, dark/light mode toggle, UI-only controls  
 - **UI/UX:** Modern, professional layouts, rounded cards, hover effects, responsive design for desktop, tablet, and mobile  
 
@@ -40,7 +40,7 @@ CRASS can function as a **Software as a Service (SaaS)** product, allowing devel
 
 - Upload & manage multiple projects  
 - Real-time AI-driven code suggestions and security alerts  
-- Color-coded badges for quick feedback (red ⚠️, green ✅, blue ℹ️)  
+- Color-coded badges for quick feedback (red , green , blue )  
 - Interactive charts for code quality and security trends  
 - Fully responsive layout for all devices  
 - Modular, reusable React components ready for backend integration  
