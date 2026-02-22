@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 230 25% 10%;
+    --foreground: 220 10% 92%;
+
+    --card: 232 22% 14%;
+    --card-foreground: 220 10% 92%;
+
+    --popover: 232 22% 14%;
+    --popover-foreground: 220 10% 92%;
+
+    --primary: 217 90% 64%;
+    --primary-foreground: 230 25% 5%;
+
+    --secondary: 232 18% 20%;
+    --secondary-foreground: 220 10% 85%;
+
+    --muted: 232 15% 18%;
+    --muted-foreground: 220 8% 65%;
+
+    --accent: 155 65% 55%;
+    --accent-foreground: 230 25% 5%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --warning: 40 92% 55%;
+    --warning-foreground: 30 50% 10%;
+
+    --success: 155 65% 55%;
+    --success-foreground: 155 50% 10%;
+
+    --info: 217 90% 64%;
+    --info-foreground: 217 50% 10%;
+
+    --border: 232 15% 22%;
+    --input: 232 15% 22%;
+    --ring: 217 90% 64%;
+
+    --radius: 0.625rem;
+
+    --sidebar-background: 232 25% 11%;
+    --sidebar-foreground: 220 8% 65%;
+    --sidebar-primary: 217 90% 64%;
+    --sidebar-primary-foreground: 230 25% 5%;
+    --sidebar-accent: 232 18% 16%;
+    --sidebar-accent-foreground: 220 10% 92%;
+    --sidebar-border: 232 15% 18%;
+    --sidebar-ring: 217 90% 64%;
+
+    --chart-1: 217 90% 64%;
+    --chart-2: 155 65% 55%;
+    --chart-3: 40 92% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 0 72% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl shadow-lg shadow-black/10;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(217 90% 64% / 0.15), 0 0 40px hsl(217 90% 64% / 0.05);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(155 65% 55% / 0.15), 0 0 40px hsl(155 65% 55% / 0.05);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .badge-danger {
+    @apply bg-destructive/15 text-destructive border border-destructive/20;
+  }
+
+  .badge-success {
+    @apply bg-success/15 text-success border border-success/20;
+  }
+
+  .badge-warning {
+    @apply bg-warning/15 text-warning border border-warning/20;
+  }
+
+  .badge-info {
+    @apply bg-info/15 text-info border border-info/20;
+  }
+}
