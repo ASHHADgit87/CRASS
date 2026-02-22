@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="256" 
+    height="256" 
+    viewBox="0 0 256 256">
+
+    <!-- Full Background (covers entire canvas) -->
+    <rect 
+        width="256" 
+        height="256" 
+        fill="#1a263e"/>
+
+    <!-- Rounded Background Layer -->
+    <rect 
+        x="0" 
+        y="0" 
+        width="256" 
+        height="256" 
+        rx="60" 
+        fill="#1a263e"/>
+
+    <!-- Shield -->
+    <path 
+        d="M128 40 
+           L190 72 
+           V128 
+           C190 170 162 208 128 220 
+           C94 208 66 170 66 128 
+           V72 
+           Z"
+        fill="none"
+        stroke="#4d94ff"
+        stroke-width="14"
+        stroke-linejoin="round"/>
+
+</svg>
