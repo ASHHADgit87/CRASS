@@ -1,4 +1,4 @@
-# CRASS AI Code Review & Security Scanner (Completion: 90%)
+# CRASS: AI Code Review & Security Scanner (Completion: 90%)
 
 **CRASS** is a full-stack web application built using React.js & Supabase for AI-powered code review and security scanning. The app features project uploads, real-time AI suggestions, scan reports, analytics dashboards, profile settings, and a sleek, responsive UI.
 
