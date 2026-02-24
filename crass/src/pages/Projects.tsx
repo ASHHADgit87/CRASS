@@ -26,7 +26,7 @@ const Projects = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("*, scans(security_score, code_quality_score, scan_date)")
+        .select("*, scans(id, security_score, code_quality_score, scan_date)")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;

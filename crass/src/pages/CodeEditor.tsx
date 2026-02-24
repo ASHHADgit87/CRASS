@@ -41,6 +41,7 @@ const CodeEditor = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  
   const [code, setCode] = useState(defaultCode);
   const [scanning, setScanning] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -57,77 +58,81 @@ const CodeEditor = () => {
     },
     enabled: !!projectId,
   });
+  
 
   const handleScan = async () => {
-    if (!user) return;
-    setScanning(true);
-    setSuggestions([]);
-    setScanResult(null);
+  if (!user) return;
+  setScanning(true);
+  setSuggestions([]);
+  setScanResult(null);
+  
 
-    try {
-      // Call the edge function
-      const res = await fetch("https://ohouzhofisecbygwjwlq.supabase.co/functions/v1/hyper-function", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        },
-        body: JSON.stringify({ codeSnippet: code }),
-      });
-
-      if (!res.ok) throw new Error(`Scan failed: ${res.statusText}`);
-      const result = await res.json();
-      setScanResult(result);
-
-      // Determine scores from response
-      const securityScore = result.securityScore ?? result.security_score ?? Math.floor(Math.random() * 40 + 60);
-      const codeQualityScore = result.codeQualityScore ?? result.code_quality_score ?? Math.floor(Math.random() * 30 + 70);
-
-      // Create scan record
-      const { data: scan, error: scanError } = await supabase.from("scans").insert({
-        project_id: projectId || null,
-        security_score: securityScore,
-        code_quality_score: codeQualityScore,
-        vulnerabilities: result.vulnerabilities ?? null,
-        suggestions: result.suggestions ?? result.response ?? null,
-      }).select().single();
-
-      if (scanError) throw scanError;
-
-      // Update project last_scan
-      if (projectId) {
-        await supabase.from("projects").update({ last_scan: new Date().toISOString() }).eq("id", projectId);
-      }
-
-      // Save AI suggestions
-      const aiSuggestions = result.suggestions ?? result.issues ?? [];
-      if (Array.isArray(aiSuggestions) && aiSuggestions.length > 0) {
-        const rows = aiSuggestions.map((s: any) => ({
-          scan_id: scan.id,
-          line_number: s.line_number ?? s.line ?? null,
-          severity: s.severity ?? "info",
-          message: s.message ?? s.description ?? s.title ?? "",
-          file_path: s.file_path ?? s.file ?? null,
-          status: "pending",
-        }));
-        await supabase.from("ai_suggestions").insert(rows);
-      }
-
-      // Load suggestions from DB
-      const { data: savedSuggestions } = await supabase
-        .from("ai_suggestions")
-        .select("*")
-        .eq("scan_id", scan.id);
-      setSuggestions(savedSuggestions ?? []);
-      if (savedSuggestions?.[0]) setExpandedId(savedSuggestions[0].id);
-
-      toast({ title: "Scan complete ✅", description: `Security: ${securityScore}% | Quality: ${codeQualityScore}%` });
-    } catch (error: any) {
-      toast({ title: "Scan failed", description: error.message, variant: "destructive" });
-    } finally {
-      setScanning(false);
+  try {
+    const res = await fetch("https://ohouzhofisecbygwjwlq.supabase.co/functions/v1/hyper-function", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json", // no Authorization header needed
+  },
+  body: JSON.stringify({ codeSnippet: code }),
+});
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Scan failed: ${res.status} ${errText}`);
     }
-  };
+
+    const result = await res.json();
+    setScanResult(result);
+
+    // Determine scores from response
+    const securityScore = result.securityScore ?? result.security_score ?? Math.floor(Math.random() * 40 + 60);
+    const codeQualityScore = result.codeQualityScore ?? result.code_quality_score ?? Math.floor(Math.random() * 30 + 70);
+
+    // Create scan record
+    const { data: scan, error: scanError } = await supabase.from("scans").insert({
+      project_id: projectId || null,
+      security_score: securityScore,
+      code_quality_score: codeQualityScore,
+      vulnerabilities: result.vulnerabilities ?? null,
+      suggestions: result.suggestions ?? result.response ?? null,
+    }).select().single();
+
+    if (scanError) throw scanError;
+
+    // Update project last_scan
+    if (projectId) {
+      await supabase.from("projects").update({ last_scan: new Date().toISOString() }).eq("id", projectId);
+    }
+
+    // Save AI suggestions
+    const aiSuggestions = result.suggestions ?? result.issues ?? [];
+    if (Array.isArray(aiSuggestions) && aiSuggestions.length > 0) {
+      const rows = aiSuggestions.map((s: any) => ({
+        scan_id: scan.id,
+        line_number: s.line_number ?? s.line ?? null,
+        severity: s.severity ?? "info",
+        message: s.message ?? s.description ?? s.title ?? "",
+        file_path: s.file_path ?? s.file ?? null,
+        status: "pending",
+      }));
+      await supabase.from("ai_suggestions").insert(rows);
+    }
+
+    // Load suggestions from DB
+    const { data: savedSuggestions } = await supabase
+      .from("ai_suggestions")
+      .select("*")
+      .eq("scan_id", scan.id);
+    setSuggestions(savedSuggestions ?? []);
+    if (savedSuggestions?.[0]) setExpandedId(savedSuggestions[0].id);
+
+    toast({ title: "Scan complete ✅", description: `Security: ${securityScore}% | Quality: ${codeQualityScore}%` });
+
+  } catch (error: any) {
+    toast({ title: "Scan failed", description: error.message, variant: "destructive" });
+  } finally {
+    setScanning(false);
+  }
+};
 
   const updateStatus = async (id: string, status: string) => {
     await supabase.from("ai_suggestions").update({ status }).eq("id", id);
